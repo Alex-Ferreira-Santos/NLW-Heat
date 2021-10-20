@@ -36,14 +36,14 @@ class AuthenticateUserService {
 
         const { login, id, avatar_url, name} = response.data
 
-        const user = await prismaClient.user.findFirst({
+        let user = await prismaClient.user.findFirst({
             where:{
                 github_id: id
             }
         })
 
         if(!user) {
-            await prismaClient.user.create({
+            user = await prismaClient.user.create({
                 data:{
                     github_id: id,
                     login,
@@ -59,9 +59,14 @@ class AuthenticateUserService {
                 avatar_url: avatar_url,
                 id: user.id,
             }
-        }, "")
+        }, 
+        process.env.JWT_SECRET as string,
+        {
+            subject: user.id,
+            expiresIn: '1d'
+        })
 
-        return response.data
+        return { token, user}
     }
 }
 
