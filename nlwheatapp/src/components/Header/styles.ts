@@ -3,7 +3,6 @@ import { COLORS, FONTS } from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
